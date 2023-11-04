@@ -12,8 +12,10 @@ public:
 
 class CreateTableCommand {
 public:
-	CreateTableCommand(const std::string& tableName, const std::vector<std::string>& columns);
-	:	
+	CreateTableCommand(const std::string& tableName, const std::vector<Column>& columns)
+	: tableName(tableName), columns(Column){
+
+	}
 
 
 	void execute();
