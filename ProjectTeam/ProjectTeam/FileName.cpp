@@ -2,7 +2,7 @@
 #include <String>
 #include <vector>
 
-class Column {
+class TableColumn {
 public:
 	std::string name;
 	std::string type;
@@ -10,7 +10,3 @@ public:
 	std::string default_value;
 };
 
-class CreateTableCommand {
-public:
-
-};
