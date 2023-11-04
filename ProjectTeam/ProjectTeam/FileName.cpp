@@ -1,5 +1,8 @@
 #include <iostream>
+#include <String>
+#include <vector>
 
-int main() {
-	std::cout << std::endl << "Hello world!";
-}
+class CreateTableCommand {
+public:
+
+};
