@@ -43,3 +43,16 @@ void Database::createTable(const std::string& tableName, const std::vector<Table
 
 	std::cout << "Table " << tableName << " created successfully" << std::endl;
 }
+void Database::displayTable(const std::string& tableName) {
+	for (const Table& table : tables) {
+		if (table.name == tableName) {
+			std::cout << "Displaying contents of table" << tableName << " : " << std::endl;
+			for (const TableColumns& column : table.columns) {
+				std::cout << column.name << " |";
+			}
+			std::cout << std::endl;
+			std::cout << "(No data)" << std::endl;
+			return;
+		}
+	}
+}
