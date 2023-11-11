@@ -17,4 +17,13 @@ class Table {
 public:
 	std::string name;
 	std::vector<TableColumn> columns;
+
+	Table(const std::string& name, const std::vector<TableColumn>& columns)
+		: name(name), columns(columns) {
+
+	}
+};
+class Database {
+public:
+
 };
