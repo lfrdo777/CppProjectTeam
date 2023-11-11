@@ -25,5 +25,9 @@ public:
 };
 class Database {
 public:
-
+	std::vector<Table> tables;
+	
+	void createTable(const std::string& tableName, const std::vector<TableColumn>& columns);
+	void dropTable(const std::string& tableName);
+	void displayTable(const std::string& tableName);
 };
