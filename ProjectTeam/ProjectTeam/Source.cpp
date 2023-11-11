@@ -31,3 +31,11 @@ public:
 	void dropTable(const std::string& tableName);
 	void displayTable(const std::string& tableName);
 };
+void Database::createTable(const std::string& tableName, const std::vector<TableColumn>& columns) {
+	for (const Table& table : tables) {
+		if (table.name == tableName) {
+			std::cout << "Error Table" << "alredy exists" << std::endl;
+			return;
+		}
+	}
+}
