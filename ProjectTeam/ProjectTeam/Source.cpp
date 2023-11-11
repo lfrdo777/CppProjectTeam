@@ -38,4 +38,8 @@ void Database::createTable(const std::string& tableName, const std::vector<Table
 			return;
 		}
 	}
+	Table newTable(tableName, columns);
+	tables.push_back(newTable);
+
+	std::cout << "Table " << tableName << " created successfully" << std::endl;
 }
