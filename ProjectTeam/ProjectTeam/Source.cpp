@@ -55,4 +55,5 @@ void Database::displayTable(const std::string& tableName) {
 			return;
 		}
 	}
+	std::cout << "Error: Table '"<<tableName << "not found." << std::endl;
 }
