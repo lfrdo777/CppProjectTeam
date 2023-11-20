@@ -47,7 +47,7 @@ void Database::displayTable(const std::string& tableName) {
 	for (const Table& table : tables) {
 		if (table.name == tableName) {
 			std::cout << "Displaying contents of table" << tableName << " : " << std::endl;
-			for (const TableColumns& column : table.columns) {
+			for (const TableColumn& column : table.columns) {
 				std::cout << column.name << " |";
 			}
 			std::cout << std::endl;
@@ -62,6 +62,7 @@ void Database::dropTable(const std::string& tableName) {
 		if (it->name == tableName) {
 			tables.erase(it);
 
+			std::cout << "Error: Table '" << tableName << "' not found." << std::endl;
 		}
 	}
 }
