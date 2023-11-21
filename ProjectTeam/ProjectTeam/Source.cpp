@@ -52,6 +52,10 @@ CommandType Database::identifyCommandType(const std::string& command) {
 	else if (command.find("DROP TABLE") != std::string::npos) {
 		return DROP_TABLE;
 	}
+	else if (command.find("DISPLAY TABLE") != std::string::npos) {
+		return DISPLAY_TABLE;
+	}
+	return INVALID;
 }
 void Database::createTable(const std::string& tableName, const std::vector<TableColumn>& columns) {
 	for (const Table& table : tables) {
