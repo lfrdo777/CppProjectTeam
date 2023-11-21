@@ -96,7 +96,11 @@ int main() {
 	Database myDatabase;
 
 	std::string command1 = "CREATE TABLE LUIS (column1 int, column2 text);";
-	std::string command3 = "DISPLAY TABLE LUIS";
-	std::string command2 = "DROP TABLE LUIS;";
+	std::string command2 = "DISPLAY TABLE LUIS";
+	std::string command3 = "DROP TABLE LUIS;";
+
+	myDatabase.displayTable(command2);
+	
+	return 0;
 	
 }
