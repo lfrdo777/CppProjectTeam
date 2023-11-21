@@ -2,6 +2,19 @@
 #include <String>
 #include <vector>
 
+enum CommandTpe {
+	CREATE_TABLE,
+	DROP_TABLE,
+	DISPLAY_TABLE,
+	CREATE_INDEX,
+	DROP_INDEX,
+	INSERT,
+	SELECT,
+	UPDATE,
+	DELETE,
+	INVALID
+};
+
 class TableColumn {
 public:
 	std::string name;
