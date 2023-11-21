@@ -44,6 +44,7 @@ public:
 	void dropTable(const std::string& tableName);
 	void displayTable(const std::string& tableName);
 	CommandType identifyCommandType(const std::string& command);
+	void processCommand(const std::string& command);
 };
 CommandType Database::identifyCommandType(const std::string& command) {
 	if (command.find("Create TABLE") != std::string::npos) {
@@ -56,6 +57,9 @@ CommandType Database::identifyCommandType(const std::string& command) {
 		return DISPLAY_TABLE;
 	}
 	return INVALID;
+}
+void Database::processCommand(const std::string& command) {
+
 }
 void Database::createTable(const std::string& tableName, const std::vector<TableColumn>& columns) {
 	for (const Table& table : tables) {
