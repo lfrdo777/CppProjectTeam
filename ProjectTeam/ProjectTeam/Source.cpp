@@ -2,7 +2,7 @@
 #include <String>
 #include <vector>
 
-enum CommandTpe {
+enum CommandType {
 	CREATE_TABLE,
 	DROP_TABLE,
 	DISPLAY_TABLE,
@@ -43,7 +43,16 @@ public:
 	void createTable(const std::string& tableName, const std::vector<TableColumn>& columns);
 	void dropTable(const std::string& tableName);
 	void displayTable(const std::string& tableName);
+	CommandType identifyCommandType(const std::string& command);
 };
+CommandType Database::identifyCommandType(const std::string& command) {
+	if (command.find("Create TABLE") != std::string::npos) {
+		return CREATE_TABLE;
+	}
+	else if (command.find("DROP TABLE") != std::string::npos) {
+		return DROP_TABLE;
+	}
+}
 void Database::createTable(const std::string& tableName, const std::vector<TableColumn>& columns) {
 	for (const Table& table : tables) {
 		if (table.name == tableName) {
