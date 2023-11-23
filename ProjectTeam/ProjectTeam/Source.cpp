@@ -42,7 +42,7 @@ public:
 	
 	void createTable(const std::string& command);
 	void dropTable(const std::string& command);
-	void displayTable(const std::string& tableName);
+	void displayTable(const std::string& command);
 	CommandType identifyCommandType(const std::string& command);
 	void processCommand(const std::string& command);
 };
@@ -76,10 +76,14 @@ void Database::processCommand(const std::string& command) {
 
 }
 void Database::createTable(const std::string& command) {
+	size_t start = command.find("CREATE TABLE") + std::string("CREATE TABLE").length();
+	size_t end = command.find('(');
+	std::string tableName = command.substr(start, end - start);
 
+	start = end + 1;
+	end = command.find(')', start);
+	std::string columnsInfo = command.substr(start, end - start);
 }
-
-	
 void Database::displayTable(const std::string& tableName) {
 	for (const Table& table : tables) {
 		if (table.name == tableName) {
