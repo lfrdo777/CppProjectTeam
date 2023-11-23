@@ -59,6 +59,14 @@ CommandType Database::identifyCommandType(const std::string& command) {
 	return INVALID;
 }
 void Database::processCommand(const std::string& command) {
+	CommandType type = identifyCommandType(command);
+	
+	switch (type) {
+	case CREATE_TABLE:
+		createTable(command);
+		break;
+
+	}
 
 }
 void Database::createTable(const std::string& tableName, const std::vector<TableColumn>& columns) {
