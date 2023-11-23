@@ -88,6 +88,15 @@ void Database::createTable(const std::string& command) {
 	while ((pos = columnsInfo.find(','))!= std::string::npos)  {
 		std::string token = columnsInfo.substr(0, pos);
 
+		size_t spacePos = token.find(' ');
+		std::string columnName = token.substr(0, spacePos);
+		token.erase(0, spacePos + 1);
+		
+		spacePos = token.find(' ');
+		int columnSize = std::stoi(token.substr(0, spacePos));
+		token.erase(0, spacePos + 1);
+		
+
 	}
 
 }
