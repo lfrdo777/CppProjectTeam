@@ -133,16 +133,18 @@ void Database::displayTable(const std::string& tableName) {
 	std::cout << "Error: Table '"<<tableName << "not found." << std::endl;
 }
 void Database::dropTable(const std::string& command) {
-	std::string dropTableKeyword = "DROP TABLE";
-	size_t start = command.find(dropTableKeyword) + dropTableKeyword.length();
+	size_t start = command.find("DROP TABLE") + std::string("DROP TABLE").length();
 	size_t end = command.find(';', start);
 	std::string tableName = command.substr(start, end - start);
-	for (auto it = tables.begin(); it != tables.end(); ++it) {
-		if (it->name == tableName) {
-			tables.erase(it);
-
-			std::cout << "Error: Table '" << tableName << "' not found." << std::endl;
-		}
+	auto it = std::remove_if(tables.begin(), tables.end(), [&](const Table& table) {
+		return table.name == tableName;
+		});
+	if (it != tables.end()) {
+		tables.erase(it, tables.end());
+		std::cout << "Table " << tableName << "dropped successfully" << std::endl;
+	}
+	else {
+		std::cout << "ERROR : Table '" << tableName << "' not found." << std::endl;
 	}
 }
 int main() {
