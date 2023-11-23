@@ -149,9 +149,9 @@ int main() {
 	std::string command2 = "DISPLAY TABLE LUIS";
 	std::string command3 = "DROP TABLE LUIS;";
 
-	myDatabase.createTable(command1);
-	myDatabase.displayTable(command2);
-	myDatabase.dropTable(command3);
+	myDatabase.processCommand(command1);
+	myDatabase.processCommand(command2);
+	myDatabase.processCommand(command3);
 	
 	return 0;
 	
