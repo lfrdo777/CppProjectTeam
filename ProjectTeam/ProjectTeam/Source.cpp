@@ -65,6 +65,12 @@ void Database::processCommand(const std::string& command) {
 	case CREATE_TABLE:
 		createTable(command);
 		break;
+	case DROP_INDEX:
+		dropTable(command);
+		break;
+		
+	default:
+		std::cout << "Error Invalid command" << std::endl;
 
 	}
 
