@@ -1,5 +1,5 @@
 #include <iostream>
-#include <String>
+#include <string>
 #include <vector>
 
 enum CommandType {
@@ -142,7 +142,7 @@ void Database::dropTable(const std::string& command) {
 		});
 	if (it != tables.end()) {
 		tables.erase(it, tables.end());
-		std::cout << "Table " << tableName << "dropped successfully" << std::endl;
+		std::cout <<"Table " << tableName << " dropped successfully" << std::endl;
 	}
 	else {
 		std::cout << "ERROR : Table '" << tableName << "' not found." << std::endl;
