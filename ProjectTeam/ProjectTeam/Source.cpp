@@ -92,9 +92,18 @@ void Database::createTable(const std::string& command) {
 		std::string columnName = token.substr(0, spacePos);
 		token.erase(0, spacePos + 1);
 		
-		spacePos = token.find(' ');
-		int columnSize = std::stoi(token.substr(0, spacePos));
-		token.erase(0, spacePos + 1);
+		spacePos = columnsInfo.find(' ');
+		std::string columnType = columnsInfo.substr(0, spacePos);
+		columnsInfo.erase(0, spacePos + 1);
+
+		spacePos = columnsInfo.find(' ');
+		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
+		columnsInfo.erase(0, spacePos + 1);
+
+		std::string defaultValue;
+		if (!columnsInfo.empty() && columnsInfo[0 == ' ']) {
+			defaultValue = columnsInfo.substr(1);
+		}
 		
 
 	}
