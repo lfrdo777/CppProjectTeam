@@ -83,6 +83,13 @@ void Database::createTable(const std::string& command) {
 	start = end + 1;
 	end = command.find(')', start);
 	std::string columnsInfo = command.substr(start, end - start);
+
+	size_t pos = 0;
+	while ((pos = columnsInfo.find(','))!= std::string::npos)  {
+		std::string token = columnsInfo.substr(0, pos);
+
+	}
+
 }
 void Database::displayTable(const std::string& tableName) {
 	for (const Table& table : tables) {
