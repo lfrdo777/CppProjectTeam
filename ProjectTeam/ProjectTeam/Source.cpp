@@ -70,6 +70,7 @@ void Database::processCommand(const std::string& command) {
 		break;
 	case DISPLAY_TABLE:
 		displayTable(command);
+		break;
 		
 	default:
 		std::cout << "Error Invalid command" << std::endl;
