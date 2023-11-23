@@ -105,8 +105,14 @@ void Database::createTable(const std::string& command) {
 			defaultValue = columnsInfo.substr(1);
 		}
 		
+		tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
+
+		columnsInfo.erase(0, pos + 1);
 
 	}
+
+	std::cout << "Table " << tableName << " created successfully" << std::endl;
+	
 
 }
 void Database::displayTable(const std::string& tableName) {
@@ -123,7 +129,11 @@ void Database::displayTable(const std::string& tableName) {
 	}
 	std::cout << "Error: Table '"<<tableName << "not found." << std::endl;
 }
-void Database::dropTable(const std::string& tableName) {
+void Database::dropTable(const std::string& command) {
+	std::string dropTableKeyword = "DROP TABLE";
+	size_t start = command.find(dropTableKeyword) + dropTableKeyword.length();
+	size_t end = command.find(';', start);
+	std::string tableName = command.substr(start, end - start);
 	for (auto it = tables.begin(); it != tables.end(); ++it) {
 		if (it->name == tableName) {
 			tables.erase(it);
