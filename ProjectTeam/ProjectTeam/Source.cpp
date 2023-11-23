@@ -65,7 +65,7 @@ void Database::processCommand(const std::string& command) {
 	case CREATE_TABLE:
 		createTable(command);
 		break;
-	case DROP_INDEX:
+	case DROP_TABLE:
 		dropTable(command);
 		break;
 		
