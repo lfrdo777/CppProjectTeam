@@ -47,7 +47,7 @@ public:
 	void processCommand(const std::string& command);
 };
 CommandType Database::identifyCommandType(const std::string& command) {
-	if (command.find("Create TABLE") != std::string::npos) {
+	if (command.find("CREATE TABLE") != std::string::npos) {
 		return CREATE_TABLE;
 	}
 	else if (command.find("DROP TABLE") != std::string::npos) {
