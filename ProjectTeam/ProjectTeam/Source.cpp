@@ -68,6 +68,8 @@ void Database::processCommand(const std::string& command) {
 	case DROP_TABLE:
 		dropTable(command);
 		break;
+	case DISPLAY_TABLE:
+		displayTable(command);
 		
 	default:
 		std::cout << "Error Invalid command" << std::endl;
@@ -80,6 +82,7 @@ void Database::createTable(const std::string& command) {
 	size_t end = command.find('(');
 	std::string tableName = command.substr(start, end - start);
 
+	tables.emplace_back(tableName, std::vector<TableColumn>());
 	start = end + 1;
 	end = command.find(')', start);
 	std::string columnsInfo = command.substr(start, end - start);
