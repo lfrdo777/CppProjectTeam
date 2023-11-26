@@ -101,13 +101,15 @@ void Database::createTable(const std::string& command) {
 	while ((pos = columnsInfo.find(',')) != std::string::npos) {
 		std::string token = columnsInfo.substr(0, pos);
 
+		token.erase(0, token.find_first_not_of(" \t\n\r\f\v"));
+		token.erase(token.find_last_not_of(" \t\n\r\f\v") + 1);
 		size_t spacePos = token.find(' ');
 		std::string columnName = token.substr(0, spacePos);
 		token.erase(0, spacePos + 1);
 
 		spacePos = columnsInfo.find(' ');
-		std::string columnType = token.substr(0, spacePos);
-		columnsInfo.erase(0, pos + 1);
+		std::string columnType = columnsInfo.substr(0, spacePos);
+		columnsInfo.erase(0, spacePos + 1);
 
 		spacePos = columnsInfo.find(' ');
 		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
