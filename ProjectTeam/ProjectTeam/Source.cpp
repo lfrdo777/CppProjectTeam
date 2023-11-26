@@ -33,8 +33,14 @@ public:
 	std::vector<TableColumn> columns;
 
 	Table(const std::string& name, const std::vector<TableColumn>& columns)
-		: name(name), columns(columns) {
+		: name(name), columns(columns) {}
+	void printTable() const {
+		std::cout << "Table:" << name << std::endl;
+		for (const TableColumn& column : columns) {
+			std::cout << column.name << " (" << column.type << ", " << column.size << column.default_value << ") |";
 
+		}
+		std::cout << std::endl;
 	}
 };
 class Database {
@@ -100,16 +106,17 @@ void Database::createTable(const std::string& command) {
 		token.erase(0, spacePos + 1);
 
 		spacePos = columnsInfo.find(' ');
-		std::string columnType = columnsInfo.substr(0, spacePos);
-		columnsInfo.erase(0, spacePos + 1);
+		std::string columnType = token.substr(0, spacePos);
+		columnsInfo.erase(0, pos + 1);
 
 		spacePos = columnsInfo.find(' ');
 		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
 		columnsInfo.erase(0, spacePos + 1);
 
 		std::string defaultValue;
-		if (!columnsInfo.empty() && columnsInfo[0 == ' ']) {
-			defaultValue = columnsInfo.substr(1);
+		if(!token.empty() && token[0] == ' '){
+			defaultValue = token.substr(1);
+
 		}
 
 		tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
@@ -125,17 +132,15 @@ void Database::createTable(const std::string& command) {
 void Database::displayTable(const std::string& tableName) {
 	for (const Table& table : tables) {
 		if (table.name == tableName) {
-			std::cout << "Displaying contents of table" << tableName << " : " << std::endl;
-			for (const TableColumn& column : table.columns) {
-				std::cout << column.name << " |";
-			}
-			std::cout << std::endl;
-			std::cout << "(No data)" << std::endl;
+			table.printTable();
 			return;
+			}
+			
 		}
-	}
 	std::cout << "Error: Table '" << tableName << "not found." << std::endl;
-}
+	}
+	
+
 void Database::dropTable(const std::string& command) {
 	size_t start = command.find("DROP TABLE") + std::string("DROP TABLE").length();
 	size_t end = command.find(';', start);
