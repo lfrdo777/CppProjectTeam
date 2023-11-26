@@ -77,7 +77,7 @@ void Database::processCommand(const std::string& command) {
 
 	default:
 		std::cout << "Error Invalid command" << std::endl;
-
+		std::abort();
 	}
 
 }
