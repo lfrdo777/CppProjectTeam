@@ -55,6 +55,7 @@ private:
 	
 };
 CommandType Database::identifyCommandType(const std::string& command) {
+
 	if (command.find("CREATE TABLE") != std::string::npos) {
 		return CREATE_TABLE;
 	}
@@ -96,13 +97,12 @@ void Database::createTable(const std::string& command) {
 	start = end + 1;
 	end = command.find(')', start);
 	std::string columnsInfo = command.substr(start, end - start);
-
+	std::string delimiter = ",";
 	size_t pos = 0;
 	while ((pos = columnsInfo.find(',')) != std::string::npos) {
 		std::string token = columnsInfo.substr(0, pos);
 
-		token.erase(0, token.find_first_not_of(" \t\n\r\f\v"));
-		token.erase(token.find_last_not_of(" \t\n\r\f\v") + 1);
+		
 		size_t spacePos = token.find(' ');
 		std::string columnName = token.substr(0, spacePos);
 		token.erase(0, spacePos + 1);
@@ -115,15 +115,44 @@ void Database::createTable(const std::string& command) {
 		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
 		columnsInfo.erase(0, spacePos + 1);
 
-		std::string defaultValue;
-		if(!token.empty() && token[0] == ' '){
-			defaultValue = token.substr(1);
+		spacePos = token.find(' ');
+		
+		if(!token.empty()){
+			try{
+				size_t converted_pos;
+				int columnSize = std::stoi(token, &converted_pos);
+				if (converted_pos != token.size()) {
+					throw std::invalid_argument("");
+				}
+				token.erase(0, spacePos + 1);
+
+				std::string defaultValue;
+				if (!token.empty() && token[0] == ' ') {
+					defaultValue = token.substr(1);
+				}
+				tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
+
+				
+			}
+			catch (const std::invalid_argument&) {
+				std::cerr << "Error: Invalid column size or  missing column size for column" << columnName << "." << std::endl;
+				return;
+			}
+			catch (const std::out_of_range) {
+				std::cerr << "Error: Invalid column size or missing column size for column" << columnName << "." << std::endl;
+				return;
+			}
+
 
 		}
+		else {
+			std::cerr << "Error: Missing column size for column '" << columnName << "'." << std::endl;
+			return;
+		}
 
-		tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
+		
 
-		columnsInfo.erase(0, pos + 1);
+		columnsInfo.erase(0, pos + delimiter.length());
 
 	}
 
@@ -131,15 +160,10 @@ void Database::createTable(const std::string& command) {
 
 
 }
-void Database::displayTable(const std::string& tableName) {
-	for (const Table& table : tables) {
-		if (table.name == tableName) {
-			table.printTable();
-			return;
-			}
-			
-		}
-	std::cout << "Error: Table '" << tableName << "not found." << std::endl;
+void Database::displayTable(const std::string& command) {
+	size_t start = command.find("DISPLAY TABLE") + std::string("DISPLAY TABLE").length();
+	size_t end = command.find(';', start);
+	std::string tableName = command.substr(start, end - start);
 	}
 	
 
@@ -161,14 +185,9 @@ void Database::dropTable(const std::string& command) {
 int main() {
 	Database myDatabase;
 
-	std::string command1 = "CREATE TABLE LUIS (column1 int, column2 text);";
-	std::string command2 = "DISPLAY TABLE LUIS";
-	std::string command3 = "DROP TABLE LUIS;";
-
-	myDatabase.processCommand(command1);
-	myDatabase.processCommand(command2);
-	myDatabase.processCommand(command3);
+	myDatabase.processCommand("CREATE TABLE Students (id int, name text, age int)");
+	myDatabase.processCommand("DISPLAY TABLE Students");
+	
 
 	return 0;
-
 }
