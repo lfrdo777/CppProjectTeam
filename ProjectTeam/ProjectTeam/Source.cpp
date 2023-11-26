@@ -164,6 +164,13 @@ void Database::displayTable(const std::string& command) {
 	size_t start = command.find("DISPLAY TABLE") + std::string("DISPLAY TABLE").length();
 	size_t end = command.find(';', start);
 	std::string tableName = command.substr(start, end - start);
+	for (const Table& table : tables) {
+		if (table.name == tableName) {
+			table.printTable();
+			return;
+		}
+	}
+	std::cout << "Error: Table '" << tableName << "' not found." << std::endl;
 	}
 	
 
@@ -187,7 +194,7 @@ int main() {
 
 	myDatabase.processCommand("CREATE TABLE Students (id int, name text, age int)");
 	myDatabase.processCommand("DISPLAY TABLE Students");
-	
+	myDatabase.processCommand("DROP TABLE Students;");
 
 	return 0;
 }
