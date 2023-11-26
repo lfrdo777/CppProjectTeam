@@ -39,7 +39,7 @@ public:
 class Database {
 public:
 	std::vector<Table> tables;
-	
+
 	void createTable(const std::string& command);
 	void dropTable(const std::string& command);
 	void displayTable(const std::string& command);
@@ -60,7 +60,7 @@ CommandType Database::identifyCommandType(const std::string& command) {
 }
 void Database::processCommand(const std::string& command) {
 	CommandType type = identifyCommandType(command);
-	
+
 	switch (type) {
 	case CREATE_TABLE:
 		createTable(command);
@@ -76,8 +76,8 @@ void Database::processCommand(const std::string& command) {
 		displayTable(tableNameToDisplay);
 		break;
 	}
-		
-		
+
+
 	default:
 		std::cout << "Error Invalid command" << std::endl;
 
@@ -90,58 +90,14 @@ void Database::createTable(const std::string& command) {
 	std::string tableName = command.substr(start, end - start);
 
 	tables.emplace_back(tableName, std::vector<TableColumn>());
-	start = end + 1;
-	end = command.find(')', start);
-	std::string columnsInfo = command.substr(start, end - start);
+
+	std::string columnsInfo = command.substr(end + 1, command.size() - end - 2);
 
 	size_t pos = 0;
-	while ((pos = columnsInfo.find(','))!= std::string::npos)  {
-		std::string token = columnsInfo.substr(0, pos);
+	while ((pos  = columnsInfo.find(',')) != std::string::npos) {
 
-		size_t spacePos = token.find(' ');
-		std::string columnName = token.substr(0, spacePos);
-		token.erase(0, spacePos + 1);
-		
-		spacePos = columnsInfo.find(' ');
-		std::string columnType = token.substr(0, spacePos);
-		token.erase(0, spacePos + 1);
-
-		spacePos = columnsInfo.find(' ');
-		int columnSize = std::stoi(token.substr(0, spacePos));
-		token.erase(0, spacePos + 1);
-
-		std::string defaultValue;
-		if (!token.empty() && token[0] == ' ') {
-			defaultValue = token.substr(1);
-		}
-
-		
-		
-		tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
-
-		columnsInfo.erase(0, pos + 1);
 
 	}
-	std::string token = columnsInfo;
-	size_t spacePos = token.find(' ');
-	std::string columnsName = token.substr(0, spacePos);
-	token.erase(0, spacePos + 1);
-
-	spacePos = token.find(' ');
-	std::string columnType = token.substr(0, spacePos);
-	token.erase(0, spacePos + 1);
-
-	spacePos = token.find(' ');
-	int columnSize = std::stoi(token.substr(0, spacePos));
-	token.erase(0, spacePos + 1);
-
-	std::string defaultValue;
-	if (!token.empty() && token[0] == ' ') {
-		defaultValue = token.substr(1);
-	}
-
-	std::cout << "Table " << tableName << " created successfully" << std::endl;
-	
 
 }
 void Database::displayTable(const std::string& tableName) {
