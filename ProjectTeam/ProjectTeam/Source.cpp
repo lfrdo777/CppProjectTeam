@@ -68,9 +68,15 @@ void Database::processCommand(const std::string& command) {
 	case DROP_TABLE:
 		dropTable(command);
 		break;
-	case DISPLAY_TABLE:
-		displayTable(command);
+	case DISPLAY_TABLE: {
+		size_t startTableName = command.find("DISPLAY TABLE") + std::string("DISPLAY TABLE").length();
+		size_t endTableName = command.find(';', startTableName);
+
+		std::string tableNameToDisplay = command.substr(startTableName, endTableName - startTableName);
+		displayTable(tableNameToDisplay);
 		break;
+	}
+		
 		
 	default:
 		std::cout << "Error Invalid command" << std::endl;
@@ -97,22 +103,41 @@ void Database::createTable(const std::string& command) {
 		token.erase(0, spacePos + 1);
 		
 		spacePos = columnsInfo.find(' ');
-		std::string columnType = columnsInfo.substr(0, spacePos);
-		columnsInfo.erase(0, spacePos + 1);
+		std::string columnType = token.substr(0, spacePos);
+		token.erase(0, spacePos + 1);
 
 		spacePos = columnsInfo.find(' ');
-		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
-		columnsInfo.erase(0, spacePos + 1);
+		int columnSize = std::stoi(token.substr(0, spacePos));
+		token.erase(0, spacePos + 1);
 
 		std::string defaultValue;
-		if (!columnsInfo.empty() && columnsInfo[0 == ' ']) {
-			defaultValue = columnsInfo.substr(1);
+		if (!token.empty() && token[0] == ' ') {
+			defaultValue = token.substr(1);
 		}
+
+		
 		
 		tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
 
 		columnsInfo.erase(0, pos + 1);
 
+	}
+	std::string token = columnsInfo;
+	size_t spacePos = token.find(' ');
+	std::string columnsName = token.substr(0, spacePos);
+	token.erase(0, spacePos + 1);
+
+	spacePos = token.find(' ');
+	std::string columnType = token.substr(0, spacePos);
+	token.erase(0, spacePos + 1);
+
+	spacePos = token.find(' ');
+	int columnSize = std::stoi(token.substr(0, spacePos));
+	token.erase(0, spacePos + 1);
+
+	std::string defaultValue;
+	if (!token.empty() && token[0] == ' ') {
+		defaultValue = token.substr(1);
 	}
 
 	std::cout << "Table " << tableName << " created successfully" << std::endl;
