@@ -113,6 +113,9 @@ void Database::processCommand(const std::string& command) {
 	case DISPLAY_TABLE:
 		displayTable(command);
 		break;
+	case IMPORT:
+		importData(command);
+		break;
 
 	default:
 		std::cout << "Error Invalid command" << std::endl;
