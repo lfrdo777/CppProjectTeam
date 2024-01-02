@@ -69,6 +69,9 @@ private:
 	void displayTable(const std::string& command);
 	void importData(const std::string& command);
 	std::string getTableToFile(const Table& table);
+	void saveTableToFile(const Table& table);
+	bool loadTableFromFile(const std::string& fileName, Table& table);
+	void deleteTableFile(const std::string& tableName);
 	
 };
 CommandType Database::identifyCommandType(const std::string& command) {
