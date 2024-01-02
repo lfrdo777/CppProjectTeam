@@ -74,6 +74,12 @@ private:
 	void deleteTableFile(const std::string& tableName);
 	
 };
+class FileManager {
+public:
+	static std::string readFile(const std::string& fileName);
+	static void writeFile(const std::string& fileName, const std::string& data);
+	static void appendToFile(const std::string& fileName, const std::string& data);
+};
 CommandType Database::identifyCommandType(const std::string& command) {
 
 	if (command.find("CREATE TABLE") != std::string::npos) {
