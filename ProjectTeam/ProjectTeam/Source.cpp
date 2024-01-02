@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 enum CommandType {
 	CREATE_TABLE,
@@ -13,6 +14,7 @@ enum CommandType {
 	SELECT,
 	UPDATE,
 	DELETE,
+	IMPORT,
 	INVALID
 };
 
@@ -46,12 +48,27 @@ public:
 class Database {
 public:
 	std::vector<Table> tables;
+	enum CommandType {
+		CREATE_TABLE,
+		DROP_TABLE,
+		DISPLAY_TABLE,
+		CREATE_INDEX,
+		DROP_INDEX,
+		INSERT,
+		SELECT,
+		UPDATE,
+		DELETE,
+		IMPORT,
+		INVALID
+	};
 	CommandType identifyCommandType(const std::string& command);
 	void processCommand(const std::string& command);
 private:
 	void createTable(const std::string& command);
 	void dropTable(const std::string& command);
 	void displayTable(const std::string& command);
+	void importData(const std::string& command);
+	std::string getTableToFile(const Table& table);
 	
 };
 CommandType Database::identifyCommandType(const std::string& command) {
@@ -194,7 +211,7 @@ int main() {
 
 	myDatabase.processCommand("CREATE TABLE Students (id int, name text, age int)");
 	myDatabase.processCommand("DISPLAY TABLE Students");
-	myDatabase.processCommand("DROP TABLE Students;");
+	myDatabase.processCommand("DROP TABLE Students");
 
 	return 0;
 }
