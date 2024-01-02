@@ -92,6 +92,10 @@ Database::CommandType Database::identifyCommandType(const std::string& command) 
 	}
 	else if (command.find("DISPLAY TABLE") != std::string::npos) {
 		return DISPLAY_TABLE;
+
+	}
+	else if (command.find("IMPORT") != std::string::npos) {
+		return IMPORT;
 	}
 	return INVALID;
 }
