@@ -192,7 +192,7 @@ void Database::createTable(const std::string& command) {
 	}
 
 	std::cout << "Table " << tableName << " created successfully" << std::endl;
-
+	saveTableToFile(tables.back());
 
 }
 void Database::displayTable(const std::string& command) {
