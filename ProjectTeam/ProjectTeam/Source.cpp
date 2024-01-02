@@ -79,8 +79,10 @@ public:
 	static std::string readFile(const std::string& fileName);
 	static void writeFile(const std::string& fileName, const std::string& data);
 	static void appendToFile(const std::string& fileName, const std::string& data);
+	static void	deleteFile(const std::string& fileName);
+	static bool fileExists(const std::string& fileName);
 };
-CommandType Database::identifyCommandType(const std::string& command) {
+Database::CommandType Database::identifyCommandType(const std::string& command) {
 
 	if (command.find("CREATE TABLE") != std::string::npos) {
 		return CREATE_TABLE;
