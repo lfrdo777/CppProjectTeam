@@ -222,6 +222,14 @@ std::string Database::getTableFileName(const std::string& tableName) {
 void Database::saveTableToFile(const Table& table) {
 	std::string fileName = getTableFileName(table.name);
 	std::ofstream file(fileName);
+
+	if (file.is_open()) {
+		file << "Table: " << table.name << "\n";
+		for (const TableColumn& column : table.columns) {
+			file << column.name << " (" << column.type << ", " << column.default_value << ") |";
+		}
+		file << "\n";
+	}
 }
 int main() {
 	Database myDatabase;
