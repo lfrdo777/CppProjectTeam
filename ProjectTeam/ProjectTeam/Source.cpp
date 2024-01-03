@@ -241,6 +241,8 @@ bool Database::loadTableFromFile(const std::string& fileName, Table& table) {
 	std::ifstream file(fileName);
 	if (file.is_open()) {
 
+		std::string line;
+		std::getline(file, line);
 	}
 }
 int main() {
