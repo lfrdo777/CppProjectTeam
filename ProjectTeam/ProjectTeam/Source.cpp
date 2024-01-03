@@ -219,6 +219,10 @@ void Database::dropTable(const std::string& command) {
 std::string Database::getTableFileName(const std::string& tableName) {
 	return tableName + ".txt";
 }
+void Database::saveTableToFile(const Table& table) {
+	std::string fileName = getTableFileName(table.name);
+	std::ofstream file(fileName);
+}
 int main() {
 	Database myDatabase;
 
