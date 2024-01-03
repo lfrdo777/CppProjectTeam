@@ -4,19 +4,6 @@
 #include <algorithm>
 #include <fstream>
 
-enum CommandType {
-	CREATE_TABLE,
-	DROP_TABLE,
-	DISPLAY_TABLE,
-	CREATE_INDEX,
-	DROP_INDEX,
-	INSERT,
-	SELECT,
-	UPDATE,
-	DELETE,
-	IMPORT,
-	INVALID
-};
 
 class TableColumn {
 public:
@@ -62,13 +49,16 @@ public:
 		INVALID
 	};
 	CommandType identifyCommandType(const std::string& command);
+
 	void processCommand(const std::string& command);
+
 private:
 	void createTable(const std::string& command);
 	void dropTable(const std::string& command);
+	std::string getTableFileName(const std::string& tableName);
 	void displayTable(const std::string& command);
 	void importData(const std::string& command);
-	std::string getTableToFile(const Table& table);
+	std::string getTableFileName(const Table& table);
 	void saveTableToFile(const Table& table);
 	bool loadTableFromFile(const std::string& fileName, Table& table);
 	void deleteTableFile(const std::string& tableName);
@@ -190,7 +180,7 @@ void Database::createTable(const std::string& command) {
 		columnsInfo.erase(0, pos + delimiter.length());
 
 	}
-
+		
 	std::cout << "Table " << tableName << " created successfully" << std::endl;
 	saveTableToFile(tables.back());
 
@@ -219,10 +209,15 @@ void Database::dropTable(const std::string& command) {
 	if (it != tables.end()) {
 		tables.erase(it, tables.end());
 		std::cout << "Table " << tableName << " dropped successfully" << std::endl;
-	}
-	else {
+
+		deleteTableFile(tableName);
+	}else {
 		std::cout << "ERROR : Table '" << tableName << "' not found." << std::endl;
 	}
+	
+}
+std::string Database::getTableFileName(const std::string& tableName) {
+	return tableName + ".txt";
 }
 int main() {
 	Database myDatabase;
