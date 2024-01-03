@@ -243,6 +243,11 @@ bool Database::loadTableFromFile(const std::string& fileName, Table& table) {
 
 		std::string line;
 		std::getline(file, line);
+		size_t pos = line.find(":");
+		if (pos != std::string::npos) {
+			table.name = line.substr(pos + 2);
+		}
+		
 	}
 }
 int main() {
