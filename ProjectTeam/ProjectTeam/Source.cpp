@@ -229,6 +229,18 @@ void Database::saveTableToFile(const Table& table) {
 			file << column.name << " (" << column.type << ", " << column.default_value << ") |";
 		}
 		file << "\n";
+
+		file.close();
+		std::cout << "Table saved to file: " << fileName << std::endl;
+	}
+	else {
+		std::cerr << "Error: Unable to open file for saving table." << std::endl;
+	}
+}
+bool Database::loadTableFromFile(const std::string& fileName, Table& table) {
+	std::ifstream file(fileName);
+	if (file.is_open()) {
+
 	}
 }
 int main() {
