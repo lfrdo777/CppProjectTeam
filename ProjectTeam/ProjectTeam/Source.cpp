@@ -268,7 +268,21 @@ void Database::deleteTableFile(const std::string& tableName) {
 	FileManager::deleteFile(fileName);
 }
 std::string FileManager::readFile(const std::string& fileName) {
+	std::ifstream file(fileName);
+	std::string content;
 
+	if (file.is_open()) {
+		std::string line;
+		while (std::getline(file, line)) {
+			content += line + "\n";
+		}
+		file.close();
+
+	}
+	else {
+		std::cerr << "Error: Unable to open file for reading" << std::endl;
+	}
+	return content;
 }
 void FileManager::writeFile(const std::string& fileName, const std::string& data) {
 
