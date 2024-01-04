@@ -267,6 +267,21 @@ void Database::deleteTableFile(const std::string& tableName) {
 	std::string fileName = getTableFileName(tableName);
 	FileManager::deleteFile(fileName);
 }
+std::string FileManager::readFile(const std::string& fileName) {
+
+}
+void FileManager::writeFile(const std::string& fileName, const std::string& data) {
+
+}
+void FileManager::appendToFile(const std::string& fileName, const std::string& data) {
+
+}
+void FileManager::deleteFile(const std::string& fileName) {
+
+}
+bool FileManager::fileExists(const std::string& fileName) {
+
+}
 int main() {
 	Database myDatabase;
 
