@@ -249,6 +249,11 @@ bool Database::loadTableFromFile(const std::string& fileName, Table& table) {
 		}
 		
 	}
+
+}
+void Database::deleteTableFile(const std::string& tableName) {
+	std::string fileName = getTableFileName(tableName);
+	FileManager::deleteFile(fileName);
 }
 int main() {
 	Database myDatabase;
