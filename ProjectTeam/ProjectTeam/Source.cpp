@@ -247,7 +247,19 @@ bool Database::loadTableFromFile(const std::string& fileName, Table& table) {
 		if (pos != std::string::npos) {
 			table.name = line.substr(pos + 2);
 		}
+		else {
+			std::cerr << "Error: Invalid file format. Missing table name." << std::endl;
+			file.close();
+			return false;
+		}
+		std::getline(file, line);
+		file.close();
+		return true;
 		
+	}
+	else {
+		std::cerr << "Error: Unable to open file for loading table" << std::endl;
+		return false;
 	}
 
 }
