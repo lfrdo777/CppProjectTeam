@@ -298,6 +298,12 @@ void FileManager::writeFile(const std::string& fileName, const std::string& data
 
 }
 void FileManager::appendToFile(const std::string& fileName, const std::string& data) {
+	std::ofstream file(fileName, std::ios::app);
+	if (file.is_open()) {
+		file << data;
+		file.close();
+		std::cerr << "Error: Unable to open file for appending." << std::endl;
+	}
 
 }
 void FileManager::deleteFile(const std::string& fileName) {
