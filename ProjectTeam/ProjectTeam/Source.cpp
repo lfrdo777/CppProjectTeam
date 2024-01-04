@@ -285,6 +285,16 @@ std::string FileManager::readFile(const std::string& fileName) {
 	return content;
 }
 void FileManager::writeFile(const std::string& fileName, const std::string& data) {
+	std::ofstream file(fileName);
+
+	if (file.is_open()) {
+		file << data;
+		file.close();
+		std::cout << "File '" << fileName << "' written successfully." << std::endl;
+	}
+	else {
+		std::cerr << "Error: Unable to open file for writting." << std::endl;
+	}
 
 }
 void FileManager::appendToFile(const std::string& fileName, const std::string& data) {
