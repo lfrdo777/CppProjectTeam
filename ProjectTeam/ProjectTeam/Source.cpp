@@ -324,7 +324,23 @@ void DatabaseimportData(const std::string& command) {
 	size_t end = command.find(';', start);
 	std::string fileName = command.substr(start, end - start);
 
-	if
+	if (!FileManager::fileExists(fileName)) {
+		std::cerr << "Error: File'" << fileName << "'not found." << std::endl;
+		return;
+	}
+	std::string fileContent = FileManager::readFile(fileName);
+	std::istringstream iss(fileContent);
+	std::string line;
+
+	while (std::getline(iss, line)) {
+		std::istringstream lineStream(line);
+		std::string columValue;
+		std::vector<std::string> values;
+		
+		while (std::getline(lineStream, columValue, ',')) {
+			values.push_back(columValue);
+		}
+	}
 }
 int main() {
 	Database myDatabase;
