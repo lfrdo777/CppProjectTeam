@@ -307,7 +307,13 @@ void FileManager::appendToFile(const std::string& fileName, const std::string& d
 
 }
 void FileManager::deleteFile(const std::string& fileName) {
+	if (std::remove(fileName.c_str()) != 0) {
+		std::cerr << "Error: Unable to delete file" << fileName << "'." << std::endl;
+	}
+	else {
+		std::cout << "File'" << fileName << "' deleted successfully" << std::endl;
 
+	}
 }
 bool FileManager::fileExists(const std::string& fileName) {
 
