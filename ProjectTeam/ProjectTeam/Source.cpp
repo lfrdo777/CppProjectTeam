@@ -320,7 +320,11 @@ bool FileManager::fileExists(const std::string& fileName) {
 	return file.good();
 }
 void DatabaseimportData(const std::string& command) {
+	size_t start = command.find("IMPORT") + std::string("IMPORT").length();
+	size_t end = command.find(';', start);
+	std::string fileName = command.substr(start, end - start);
 
+	if
 }
 int main() {
 	Database myDatabase;
