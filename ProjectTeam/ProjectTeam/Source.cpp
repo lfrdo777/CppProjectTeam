@@ -316,6 +316,10 @@ void FileManager::deleteFile(const std::string& fileName) {
 	}
 }
 bool FileManager::fileExists(const std::string& fileName) {
+	std::ifstream file(fileName);
+	return file.good();
+}
+void DatabaseimportData(const std::string& command) {
 
 }
 int main() {
