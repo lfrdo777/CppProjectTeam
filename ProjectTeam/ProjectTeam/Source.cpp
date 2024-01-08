@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include<sstream>
 
 
 class TableColumn {
@@ -149,11 +150,12 @@ void Database::createTable(const std::string& command) {
 				if (converted_pos != token.size()) {
 					throw std::invalid_argument("");
 				}
-				token.erase(0, spacePos + 1);
+				
 
 				std::string defaultValue;
-				if (!token.empty() && token[0] == ' ') {
-					defaultValue = token.substr(1);
+				if (spacePos != std::string::npos) {
+					token.erase(0, spacePos + 1);
+					defaultValue = token;
 				}
 				tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
 
@@ -197,6 +199,10 @@ void Database::displayTable(const std::string& command) {
 	}
 	std::cout << "Error: Table '" << tableName << "' not found." << std::endl;
 	}
+
+void Database::importData(const std::string& command)
+{
+}
 	
 
 void Database::dropTable(const std::string& command) {
@@ -218,6 +224,10 @@ void Database::dropTable(const std::string& command) {
 }
 std::string Database::getTableFileName(const std::string& tableName) {
 	return tableName + ".txt";
+}
+std::string Database::getTableFileName(const Table& table)
+{
+	return std::string();
 }
 void Database::saveTableToFile(const Table& table) {
 	std::string fileName = getTableFileName(table.name);
@@ -341,7 +351,9 @@ void DatabaseimportData(const std::string& command) {
 			values.push_back(columValue);
 		}
 	}
+	std::cout << "Data imported successfully from file: " << fileName << std::endl;
 }
+
 int main() {
 	Database myDatabase;
 
