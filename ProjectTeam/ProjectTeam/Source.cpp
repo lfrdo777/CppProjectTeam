@@ -137,6 +137,8 @@ void Database::createTable(const std::string& command) {
 		std::string columnType = columnsInfo.substr(0, spacePos);
 		columnsInfo.erase(0, spacePos + 1);
 
+		std::string columnType = token;
+
 		spacePos = columnsInfo.find(' ');
 		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
 		columnsInfo.erase(0, spacePos + 1);
@@ -146,7 +148,8 @@ void Database::createTable(const std::string& command) {
 		if(!token.empty()){
 			try{
 				size_t converted_pos;
-				int columnSize = std::stoi(token, &converted_pos);
+
+				int columnSize = std::stoi(columnsInfo, &converted_pos);
 				if (converted_pos != token.size()) {
 					throw std::invalid_argument("");
 				}
