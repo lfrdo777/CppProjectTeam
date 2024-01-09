@@ -125,71 +125,59 @@ void Database::createTable(const std::string& command) {
 	std::string columnsInfo = command.substr(start, end - start);
 	std::string delimiter = ",";
 	size_t pos = 0;
-	while ((pos = columnsInfo.find(',')) != std::string::npos) {
-		std::string token = columnsInfo.substr(0, pos);
+	while ((pos = columnsInfo.find(delimiter)) != std::string::npos) {
+		std::string columnDetail = columnsInfo.substr(0, pos);
 
-		
-		size_t spacePos = token.find(' ');
-		std::string columnName = token.substr(0, spacePos);
-		token.erase(0, spacePos + 1);
+		std::istringstream columnStream(columnDetail);
+		std::string columnName, columnType, columnSizeStr;
+		int columnSize;
 
-		spacePos = columnsInfo.find(' ');
-		std::string columnType = columnsInfo.substr(0, spacePos);
-		columnsInfo.erase(0, spacePos + 1);
+		columnStream >> columnName >> columnType >> columnSizeStr;
 
-		std::string columnType = token;
-
-		spacePos = columnsInfo.find(' ');
-		int columnSize = std::stoi(columnsInfo.substr(0, spacePos));
-		columnsInfo.erase(0, spacePos + 1);
-
-		spacePos = token.find(' ');
-		
-		if(!token.empty()){
-			try{
-				size_t converted_pos;
-
-				int columnSize = std::stoi(columnsInfo, &converted_pos);
-				if (converted_pos != token.size()) {
-					throw std::invalid_argument("");
-				}
-				
-
-				std::string defaultValue;
-				if (spacePos != std::string::npos) {
-					token.erase(0, spacePos + 1);
-					defaultValue = token;
-				}
-				tables.back().columns.emplace_back(columnName, columnType, columnSize, defaultValue);
-
-				
-			}
-			catch (const std::invalid_argument&) {
-				std::cerr << "Error: Invalid column size or  missing column size for column" << columnName << "." << std::endl;
-				return;
-			}
-			catch (const std::out_of_range) {
-				std::cerr << "Error: Invalid column size or missing column size for column" << columnName << "." << std::endl;
-				return;
-			}
-
-
+		try {
+			columnSize = std::stoi(columnSizeStr);
 		}
-		else {
-			std::cerr << "Error: Missing column size for column '" << columnName << "'." << std::endl;
+		catch (const std::invalid_argument& e) {
+			std::cerr << "Error: Invalid column size for column " << columnName << std::endl;
+			return;
+		}
+		catch (const std::out_of_range& e) {
+			std::cerr << "Error: Column size out of range for column " << columnName << std::endl;
 			return;
 		}
 
-		
+		tables.back().columns.emplace_back(columnName, columnType, columnSize);
 
 		columnsInfo.erase(0, pos + delimiter.length());
-
 	}
-		
+
+	
+	if (!columnsInfo.empty()) {
+		std::istringstream columnStream(columnsInfo);
+		std::string columnName, columnType, columnSizeStr;
+		int columnSize;
+
+		columnStream >> columnName >> columnType >> columnSizeStr;
+
+		try {
+			columnSize = std::stoi(columnSizeStr);
+		}
+		catch (const std::invalid_argument& e) {
+			std::cerr << "Error: Invalid column size for column " << columnName << std::endl;
+			return;
+		}
+		catch (const std::out_of_range& e) {
+			std::cerr << "Error: Column size out of range for column " << columnName << std::endl;
+			return;
+		}
+
+		tables.back().columns.emplace_back(columnName, columnType, columnSize);
+	}
+
 	std::cout << "Table " << tableName << " created successfully" << std::endl;
 	saveTableToFile(tables.back());
-
 }
+
 void Database::displayTable(const std::string& command) {
 	size_t start = command.find("DISPLAY TABLE") + std::string("DISPLAY TABLE").length();
 	size_t end = command.find(';', start);
