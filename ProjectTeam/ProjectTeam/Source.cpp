@@ -4,7 +4,16 @@
 #include <algorithm>
 #include <fstream>
 #include<sstream>
+#include <regex>
 
+std::string trim(const std::string& str) {
+	size_t first = str.find_first_not_of(' ');
+	if (first == std::string::npos) {
+		return str;
+	}
+	size_t last = str.find_last_not_of(' ');
+	return str.substr(first, (last - first + 1));
+}
 
 class TableColumn {
 public:
@@ -118,70 +127,54 @@ void Database::createTable(const std::string& command) {
 	size_t start = command.find("CREATE TABLE") + std::string("CREATE TABLE").length();
 	size_t end = command.find('(');
 	std::string tableName = command.substr(start, end - start);
+	tableName = trim(tableName);
+
+
+	tableName = std::regex_replace(tableName, std::regex("^ +| +$|( ) +"), "$1");
 
 	tables.emplace_back(tableName, std::vector<TableColumn>());
 	start = end + 1;
 	end = command.find(')', start);
 	std::string columnsInfo = command.substr(start, end - start);
-	std::string delimiter = ",";
-	size_t pos = 0;
-	while ((pos = columnsInfo.find(delimiter)) != std::string::npos) {
-		std::string columnDetail = columnsInfo.substr(0, pos);
+	std::istringstream columnStream(columnsInfo);
+	std::string columnDetail;
 
-		std::istringstream columnStream(columnDetail);
-		std::string columnName, columnType, columnSizeStr;
-		int columnSize;
+	while (std::getline(columnStream, columnDetail, ',')) {
+		std::istringstream detailStream(columnDetail);
+		std::string columnName, columnType;
+		int columnSize = -1; 
+		std::string columnSizeStr;
 
-		columnStream >> columnName >> columnType >> columnSizeStr;
-
-		try {
-			columnSize = std::stoi(columnSizeStr);
-		}
-		catch (const std::invalid_argument& e) {
-			std::cerr << "Error: Invalid column size for column " << columnName << std::endl;
-			return;
-		}
-		catch (const std::out_of_range& e) {
-			std::cerr << "Error: Column size out of range for column " << columnName << std::endl;
-			return;
-		}
-
-		tables.back().columns.emplace_back(columnName, columnType, columnSize);
-
-		columnsInfo.erase(0, pos + delimiter.length());
-	}
-
-	
-	if (!columnsInfo.empty()) {
-		std::istringstream columnStream(columnsInfo);
-		std::string columnName, columnType, columnSizeStr;
-		int columnSize;
-
-		columnStream >> columnName >> columnType >> columnSizeStr;
-
-		try {
-			columnSize = std::stoi(columnSizeStr);
-		}
-		catch (const std::invalid_argument& e) {
-			std::cerr << "Error: Invalid column size for column " << columnName << std::endl;
-			return;
-		}
-		catch (const std::out_of_range& e) {
-			std::cerr << "Error: Column size out of range for column " << columnName << std::endl;
-			return;
+		detailStream >> columnName >> columnType;
+		if (detailStream >> columnSizeStr) {
+			try {
+				columnSize = std::stoi(columnSizeStr);
+			}
+			catch (const std::invalid_argument& e) {
+				std::cerr << "Error: Invalid column size for column " << columnName << std::endl;
+				return;
+			}
+			catch (const std::out_of_range& e) {
+				std::cerr << "Error: Column size out of range for column " << columnName << std::endl;
+				return;
+			}
 		}
 
-		tables.back().columns.emplace_back(columnName, columnType, columnSize);
+
+		columnName = std::regex_replace(columnName, std::regex("^ +| +$|( ) +"), "$1");
+		columnType = std::regex_replace(columnType, std::regex("^ +| +$|( ) +"), "$1");
+
+		tables.back().columns.emplace_back(columnName, columnType, columnSize, "");
 	}
 
 	std::cout << "Table " << tableName << " created successfully" << std::endl;
 	saveTableToFile(tables.back());
 }
-
 void Database::displayTable(const std::string& command) {
 	size_t start = command.find("DISPLAY TABLE") + std::string("DISPLAY TABLE").length();
 	size_t end = command.find(';', start);
 	std::string tableName = command.substr(start, end - start);
+	tableName = trim(tableName);
 	for (const Table& table : tables) {
 		if (table.name == tableName) {
 			table.printTable();
@@ -200,6 +193,7 @@ void Database::dropTable(const std::string& command) {
 	size_t start = command.find("DROP TABLE") + std::string("DROP TABLE").length();
 	size_t end = command.find(';', start);
 	std::string tableName = command.substr(start, end - start);
+	tableName = trim(tableName);
 	auto it = std::remove_if(tables.begin(), tables.end(), [&](const Table& table) {
 		return table.name == tableName;
 		});
